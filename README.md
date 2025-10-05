@@ -2,6 +2,7 @@
 
 ![Logo](https://assets.spaceappschallenge.org/media/images/Colorway2-Color_White3x.width-440.jpegquality-60.png)
 <img width="250" height="254" alt="image" src="https://github.com/user-attachments/assets/589b055d-1ba0-4bbd-8bd6-52d97f9301b4" />
+<img width="512" height="160.5" alt="image" src="https://github.com/user-attachments/assets/81ad3886-5926-4e53-ab4d-fd42f5194adf" />
 
 
 
