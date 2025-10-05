@@ -1,4 +1,4 @@
-import { StyleSheet, LogBox, StatusBar } from 'react-native';
+import { StyleSheet, LogBox, StatusBar, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 // Pages
@@ -7,18 +7,19 @@ import Chat from "./pages/chat"
 //
 const Stack = createNativeStackNavigator()
 export const NASAurl = `https://power.larc.nasa.gov/api`
-export const GeminiURL = ``
+
 LogBox.ignoreAllLogs();
 StatusBar.setHidden(true);
 // Func APP
 export default function App() {
   return (
+    
     <NavigationContainer>
-     <Stack.Navigator initialRouteName='Main'>
-      <Stack.Screen options={{headerShown: false}} name="Main" component={Main}/>
-      {/* <Stack.Screen options={{headerShown: false}} name="Chat" component={Chat}/> */}
-    </Stack.Navigator>
-  </NavigationContainer>
+      <Stack.Navigator initialRouteName='Chat'>
+        
+        <Stack.Screen options={{headerShown: false}} name="Chat" component={Chat}/> 
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
