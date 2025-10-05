@@ -42,19 +42,6 @@ export default function Chat() {
           {loading ? "Завантаження..." : "Enter"}
         </Text>
       </TouchableOpacity>
-  button: {
-    marginTop: 16,
-    backgroundColor: '#81cae7',
-    paddingVertical: 10,
-    paddingHorizontal: 32,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#121212',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
       <Text style={styles.result}>
         {responseText ? `Привіт, ${name}! 👋 ${responseText}` : "Твоє ім’я з’явиться тут."}
       </Text>
