@@ -1,28 +1,27 @@
 import { GoogleGenAI } from "@google/genai";
-import { useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { useState, useRef, useEffect } from "react";
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Image } from "react-native";
 
 const ai = new GoogleGenAI({ apiKey: 'PUT_YOUR_API_KEY_HERE' });
-export default function Chat({ navigation, route }) {
 
-const updateWeather = route.params?.updateWeather;
-const weather = route.params?.weather;  
+export default function Chat({ navigation, route }) {
+  const updateWeather = route.params?.updateWeather;
+  const weather = route.params?.weather;
+
   const [request, setRequest] = useState("");
-  const [messages, setMessages] = useState([]); // {from: 'user'|'ai', text: string}
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-
+  const scrollRef = useRef();
 
   const handlePress = async () => {
     if (!request.trim()) return;
     setLoading(true);
-    // Add user message
     setMessages(prev => [...prev, { from: 'user', text: request }]);
     try {
       if (typeof updateWeather === 'function') {
         await updateWeather();
       }
-      // Формуємо повний запит з погодою
       const fullRequest = "Make the answer so short (about conditions, temperature, city, country, recomendations about what clothes to wear on): " + request + (JSON.stringify(weather) ? (' ' + JSON.stringify(weather)) : '');
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
@@ -35,53 +34,58 @@ const weather = route.params?.weather;
     setRequest("");
     setLoading(false);
   };
-
+  useEffect(() => {
+    scrollRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
   return (
-    <View style={styles.container}>
-      <View style={styles.bubbleContainer}>
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: "#121212" }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+    >
+      <View style={styles.container}>
         <ScrollView
-          style={{ width: '100%' }}
+          style={styles.bubbleContainer}
           contentContainerStyle={{ paddingVertical: 10 }}
-          ref={ref => { if (ref) ref.scrollToEnd({ animated: true }); }}
+          ref={scrollRef}
+          keyboardShouldPersistTaps="handled"
         >
           {messages.map((msg, idx) => (
             <ChatBubble key={idx} from={msg.from} text={msg.text} />
           ))}
         </ScrollView>
-      </View>
-      <View style={{ width: '100%', height: 1, backgroundColor: '#444' }}></View>
-      <View style={[styles.inputContainer, { width: '90%' }]}>  
-        <Text style={styles.label}>Print your request:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="For example: What is the weather like today?"
-          placeholderTextColor="#aaa"
-          value={request}
-          onChangeText={setRequest}
-          editable={!loading}
-        />
-        <View style={{ width: '100%', height: '25%', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-evenly' }}>
-          <TouchableOpacity
-            style={[styles.button, loading && { opacity: 0.6 }]}
-            onPress={handlePress}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading ? "Завантаження..." : "Enter"}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, loading && { opacity: 0.6 }]}
-            onPress={() => { navigation.goBack(); }}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              Back
-            </Text>
-          </TouchableOpacity>
+        <View style={{ width: '100%', height: 1, backgroundColor: '#444' }} />
+        <View style={[styles.inputContainer, { width: '90%' }]}>
+          <Text style={styles.label}>Print your request:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="For example: What is the weather like today?"
+            placeholderTextColor="#aaa"
+            value={request}
+            onChangeText={setRequest}
+            editable={!loading}
+          />
+          <View style={{ width: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-evenly' }}>
+            <TouchableOpacity
+              style={[styles.button, loading && { opacity: 0.6 }]}
+              onPress={handlePress}
+              disabled={loading}
+            >
+              <Text style={styles.buttonText}>
+                {loading ? "Завантаження..." : "Enter"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, loading && { opacity: 0.6 }]}
+              onPress={() => { navigation.goBack(); }}
+              disabled={loading}
+            >
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -91,20 +95,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#121212",
     justifyContent: "space-between",
     alignItems: "center",
-    flexDirection: "column",
-    paddingVertical: 0,
   },
   bubbleContainer: {
     flex: 1,
     width: '100%',
     paddingHorizontal: 10,
-    // Remove marginTop and marginBottom for better flex spacing
   },
   inputContainer: {
     width: '100%',
     alignItems: 'center',
-    height: '30%',
-    // No margin needed, spacing handled by flex
+    paddingVertical: 10,
   },
   label: {
     color: "#fff",
@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 10,
     paddingHorizontal: 20,
-    // Remove height: "20%" for better layout
   },
   button: {
     backgroundColor: '#a259e6',
@@ -131,7 +130,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     borderRadius: 8,
     marginTop: 5,
-    width: '100%'
+    width: '100%',
   },
   buttonText: {
     color: '#121212',
@@ -167,7 +166,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
 function ChatBubble({ from, text }) {
   const isUser = from === 'user';
   return (
@@ -177,24 +175,17 @@ function ChatBubble({ from, text }) {
       marginVertical: 4,
       marginHorizontal: 8,
     }}>
-
       {!isUser && (
         <Image
-          source={require('../assets/adaptive-icon.png')}
+          source={require("../assets/adaptive-icon.png")}
           style={{ width: 36, height: 36, borderRadius: 18, marginRight: 6 }}
         />
       )}
-
       <View style={[
         styles.bubble,
         isUser ? styles.userBubble : styles.aiBubble
       ]}>
-        <Text style={[
-          styles.bubbleText,
-          isUser && styles.userText
-        ]}>
-          {text}
-        </Text>
+        <Text style={[styles.bubbleText, isUser && styles.userText]}>{text}</Text>
       </View>
     </View>
   );
