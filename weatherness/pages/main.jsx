@@ -18,6 +18,7 @@ export default function Main({ navigation, route }) {
 
   }, []);
     function calculateDates() {
+        // The function is AI generated
         const today = new Date();
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(today.getDate() - 7);
@@ -34,6 +35,7 @@ export default function Main({ navigation, route }) {
     }
 
     function determineWeather(data) {
+        // The function is AI generated
         try {
             const values = data?.properties?.parameter;
             if (!values) return "Unknown";
