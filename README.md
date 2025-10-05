@@ -1,6 +1,7 @@
 # NASA Space Apps Challenge 2025
 
 ![Logo](https://assets.spaceappschallenge.org/media/images/Colorway2-Color_White3x.width-440.jpegquality-60.png)
+<img width="250" height="254" alt="image" src="https://github.com/user-attachments/assets/589b055d-1ba0-4bbd-8bd6-52d97f9301b4" />
 
 
 
