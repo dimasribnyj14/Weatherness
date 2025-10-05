@@ -7,9 +7,8 @@ import Chat from "./pages/chat"
 //
 const Stack = createNativeStackNavigator()
 export const NASAurl = `https://power.larc.nasa.gov/api`
-export const GeminiURL = ``
 LogBox.ignoreAllLogs();
-StatusBar.setHidden(true);
+// StatusBar.setHidden(true);
 // Func APP
 export default function App() {
   return (

@@ -142,7 +142,7 @@ export default function Main({ navigation, route }) {
                         </View>
 
   <Image 
-    style={{ height: '40%', width: '50%' }} 
+    style={{ height: '40%', width: '60%' }} 
     source={require("../assets/sadRobot.png")} 
   />
 
@@ -175,7 +175,7 @@ export default function Main({ navigation, route }) {
                         <Text style={{ color: 'white', fontSize: 24, marginBottom: 50, fontFamily: 'monospace', fontWeight: 'bold' }}>{weatherCondition}</Text>
                         </View>
 
-                        <Image style={{height: '40%',width: '50%'}} source={require("../assets/robotHappy.png")} />
+                        <Image style={{height: '40%',width: '60%'}} source={require("../assets/robotHappy.png")} />
                         <ImageBackground 
   source={require('../assets/cloudPanel.png')} 
   resizeMode="contain" 
