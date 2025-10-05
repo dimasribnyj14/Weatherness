@@ -15,6 +15,7 @@ export default function Chat({ navigation, route }) {
   const scrollRef = useRef();
 
   const handlePress = async () => {
+    // The function is AI generated
     if (!request.trim()) return;
     setLoading(true);
     setMessages(prev => [...prev, { from: 'user', text: request }]);
