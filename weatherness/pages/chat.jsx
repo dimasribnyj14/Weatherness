@@ -1,37 +1,50 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { GoogleGenAI } from "@google/genai";
-
+import Main from "./main";
+import { useRoute } from '@react-navigation/native';
 const ai = new GoogleGenAI({ apiKey: 'AIzaSyBJlbE-eI6IoFQkx8EYKQ28na1_Mvy4kKA' });
 
+
 export default function Chat() {
-  const [name, setName] = useState("");
+    const route = useRoute();
+    const updateWeather = route.params?.updateWeather;
+    const weather = route.params?.weather;  
+  const [request, setRequest] = useState("");
   const [responseText, setResponseText] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handlePress = async () => {
     setLoading(true);
     try {
+      if (typeof updateWeather === 'function') {
+        await updateWeather();
+      }
+      // Формуємо повний запит з погодою
+      const fullRequest = request + (weather ? (' ' + weather) : '');
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: name,
+        contents: fullRequest,
       });
       setResponseText(response.text);
     } catch (e) {
-      setResponseText("Помилка отримання відповіді");
+      setResponseText(e.message || e.toString());
     }
     setLoading(false);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Введи своє ім’я:</Text>
+    <Text style={styles.result}>
+        We: {responseText}
+      </Text>
+      <Text style={styles.label}>Print your request:</Text>
       <TextInput
         style={styles.input}
-        placeholder="Наприклад: Андрій"
+        placeholder="For example: What is the weather like today?"
         placeholderTextColor="#aaa"
-        value={name}
-        onChangeText={setName}
+        value={request}
+        onChangeText={setRequest}
       />
       <TouchableOpacity
         style={[styles.button, loading && { opacity: 0.6 }]}
@@ -42,9 +55,7 @@ export default function Chat() {
           {loading ? "Завантаження..." : "Enter"}
         </Text>
       </TouchableOpacity>
-      <Text style={styles.result}>
-        {responseText ? `Привіт, ${name}! 👋 ${responseText}` : "Твоє ім’я з’явиться тут."}
-      </Text>
+      
     </View>
   );
 }
@@ -70,7 +81,7 @@ const styles = StyleSheet.create({
     color: "white",
     borderRadius: 8,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 1,
     fontSize: 16,
   },
   result: {

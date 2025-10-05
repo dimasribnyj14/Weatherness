@@ -15,8 +15,8 @@ export default function App() {
   return (
     
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Chat'>
-        
+      <Stack.Navigator initialRouteName='Main'>
+        <Stack.Screen options={{headerShown: false}} name="Main" component={Main}/> 
         <Stack.Screen options={{headerShown: false}} name="Chat" component={Chat}/> 
       </Stack.Navigator>
     </NavigationContainer>

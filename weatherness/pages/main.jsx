@@ -1,13 +1,13 @@
 import { Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import {NASAurl, styles} from "../App.js"
-import { useState,useEffect } from 'react';
+import { useState,useEffect, use } from 'react';
 import * as Location from 'expo-location';
 
 export default function Main({navigation}) {
     const [isLoading, setIsLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState(null);
     const [info, setInfo] = useState(null)
-
+    
 
     function calculateDates() {
         const today = new Date();
@@ -34,6 +34,8 @@ export default function Main({navigation}) {
             console.log("Weather data received:", JSON.stringify(data));
             setInfo(JSON.stringify(data))
             setIsLoading(false);
+            navigation.navigate('Chat', { weather: info, 
+        updateWeather: () => {  } });
         })
         .catch(error => {
             console.error("Error fetching weather data:", error);
@@ -44,6 +46,7 @@ export default function Main({navigation}) {
 
     useEffect(() => {
         (async () => {
+
             setIsLoading(true);
             const { dataStart, dataEnd } = calculateDates();
             
@@ -67,10 +70,13 @@ export default function Main({navigation}) {
                 setErrorMsg('Error getting location. Check device settings.');
                 setIsLoading(false);
             }
+           
         })();
     }, []);
+     
+    
     return(
-        <View style={styles.container}>
+       <View style={styles.container}>
             <View style={{height: '100%',width: "100%", alignItems: "center", justifyContent: "center"}}>
                 {isLoading ? (
                     <ActivityIndicator size="large" color="#81cae7ff" />
@@ -81,6 +87,7 @@ export default function Main({navigation}) {
                 )}
             </View>
         </View>
+        
     )
   }
   
