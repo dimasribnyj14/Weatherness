@@ -16,7 +16,7 @@ export default function App() {
     <NavigationContainer>
      <Stack.Navigator initialRouteName='Main'>
       <Stack.Screen options={{headerShown: false}} name="Main" component={Main}/>
-      {/* <Stack.Screen options={{headerShown: false}} name="Chat" component={Chat}/> */}
+      <Stack.Screen options={{headerShown: false}} name="Chat" component={Chat}/>
     </Stack.Navigator>
   </NavigationContainer>
   );
@@ -61,8 +61,27 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#000000ff',
+    backgroundColor: '#241335ff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
+  weatherIcon: {
+    width: "100%",
+    height: "45%"
+  },
+  mainPos:{
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'column'
+  },
+  cloudPanel:{
+    width: '100%',
+    height: '30%',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    
+  }
 });
